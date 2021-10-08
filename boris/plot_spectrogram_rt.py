@@ -31,6 +31,7 @@ from PyQt5.QtCore import pyqtSignal, QEvent
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+import parselmouth
 
 class Plot_spectrogram_RT(QWidget):
 
@@ -93,7 +94,6 @@ class Plot_spectrogram_RT(QWidget):
         hlayout2.addWidget(self.sb_freq_max)
         layout.addLayout(hlayout2)
 
-
         self.setLayout(layout)
 
         self.installEventFilter(self)
@@ -153,6 +153,10 @@ class Plot_spectrogram_RT(QWidget):
 
         self.wav_file_path = wav_file_path
 
+        self.snd = parselmouth.Sound(wav_file_path)
+        print(self.snd)
+        self.spectrogram = self.snd.to_spectrogram()
+
         return {"media_length": self.media_length,
                 "frame_rate": self.frame_rate}
 
@@ -177,6 +181,16 @@ class Plot_spectrogram_RT(QWidget):
         # start
         if current_time <= self.interval / 2:
 
+
+            dynamic_range=70
+            X, Y = self.spectrogram.x_grid(), self.spectrogram.y_grid()
+            sg_db = 10 * np.log10(self.spectrogram.values)
+            ax.pcolormesh(X, Y, sg_db, vmin=sg_db.max() - dynamic_range, cmap='afmhot')
+            ax.set_ylim(self.spectrogram.ymin, self.spectrogram.ymax)
+
+            ax.set_xlim(current_time - self.interval / 2, current_time + self.interval / 2)
+
+            '''
             Pxx, freqs, bins, im = ax.specgram(self.sound_info[: int((self.interval) * self.frame_rate)],
                                                mode="psd",
                                                #NFFT=1024,
@@ -184,8 +198,9 @@ class Plot_spectrogram_RT(QWidget):
                                                #noverlap=900,
                                                cmap=self.spectro_color_map)
 
-            ax.set_xlim(current_time - self.interval / 2, current_time + self.interval / 2)
 
+            ax.set_xlim(current_time - self.interval / 2, current_time + self.interval / 2)
+            '''
 
             # cursor
             ax.axvline(x=current_time, color=self.cursor_color, linestyle="-")
@@ -195,12 +210,20 @@ class Plot_spectrogram_RT(QWidget):
 
             i = int(round(len(self.sound_info) - (self.interval * self.frame_rate), 0))
 
+            dynamic_range=70
+            X, Y = self.spectrogram.x_grid(), self.spectrogram.y_grid()
+            sg_db = 10 * np.log10(self.spectrogram.values)
+            ax.pcolormesh(X, Y, sg_db, vmin=sg_db.max() - dynamic_range, cmap='afmhot')
+            ax.set_ylim(self.spectrogram.ymin, self.spectrogram.ymax)
+
+            '''
             Pxx, freqs, bins, im = ax.specgram(self.sound_info[i:],
                                                mode="psd",
                                                #NFFT=1024,
                                                Fs=self.frame_rate,
                                                #noverlap=900,
                                                cmap=self.spectro_color_map)
+            '''
 
             lim1 = current_time - (self.media_length - self.interval / 2)
             lim2 = lim1 + self.interval
@@ -215,9 +238,18 @@ class Plot_spectrogram_RT(QWidget):
         # middle
         else:
 
-            start = (current_time - self.interval / 2) * self.frame_rate
-            end = (current_time + self.interval / 2) * self.frame_rate
 
+            #start = (current_time - self.interval / 2) * self.frame_rate
+            #end = (current_time + self.interval / 2) * self.frame_rate
+
+            dynamic_range=70
+            X, Y = self.spectrogram.x_grid(), self.spectrogram.y_grid()
+            sg_db = 10 * np.log10(self.spectrogram.values)
+            ax.pcolormesh(X, Y, sg_db, vmin=sg_db.max() - dynamic_range, cmap='afmhot')
+            ax.set_ylim(self.spectrogram.ymin, self.spectrogram.ymax)
+
+
+            '''
             Pxx, freqs, bins, im = ax.specgram(self.sound_info[int(round((current_time - self.interval / 2) * self.frame_rate, 0)):
                                                                int(round((current_time + self.interval / 2) * self.frame_rate, 0))],
                                                mode="psd",
@@ -225,14 +257,14 @@ class Plot_spectrogram_RT(QWidget):
                                                Fs=self.frame_rate,
                                                #noverlap=900,
                                                cmap=self.spectro_color_map)
-
+            '''
 
             ax.set_xticklabels([str(round(current_time + w - self.interval / 2, 1)) for w in ax.get_xticks()])
 
             # cursor
             ax.axvline(x=self.interval / 2, color=self.cursor_color, linestyle="-")
 
-        ax.set_ylim(self.sb_freq_min.value(), self.sb_freq_max.value())
+        #ax.set_ylim(self.sb_freq_min.value(), self.sb_freq_max.value())
 
         self.figure.subplots_adjust(wspace=0, hspace=0)
 
