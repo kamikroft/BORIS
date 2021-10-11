@@ -180,8 +180,8 @@ class Plot_waveform_RT(QWidget):
         # middle
         else:
 
-            start = (current_time - self.interval/2)* self.frame_rate
-            end = (current_time + self.interval/2)* self.frame_rate
+            start = int(round((current_time - self.interval / 2) * self.frame_rate, 0))
+            end = int(round((current_time + self.interval / 2)* self.frame_rate, 0))
 
             '''
             Pxx, freqs, bins, im = ax.specgram(self.sound_info[int(round((current_time - self.interval/2) * self.frame_rate, 0)):
@@ -192,18 +192,18 @@ class Plot_waveform_RT(QWidget):
                                            noverlap=900,
                                                vmin=VMIN)
             '''
-            time_ = np.linspace(0, len(self.sound_info[int(round((current_time - self.interval/2) * self.frame_rate, 0)):
-                                                               int(round((current_time + self.interval/2) * self.frame_rate, 0))])/self.frame_rate, num=len(self.sound_info[int(round((current_time - self.interval/2) * self.frame_rate, 0)):
-                                                               int(round((current_time + self.interval/2) * self.frame_rate, 0))]))
-            ax.plot(time_, self.sound_info[int(round((current_time - self.interval/2) * self.frame_rate, 0)):
-                                                               int(round((current_time + self.interval/2) * self.frame_rate, 0))])
+            time_ = np.linspace(0, len(self.sound_info[start:end]) / self.frame_rate,
+                                num=len(self.sound_info[start:end]))
+
+            ax.plot(time_, self.sound_info[start:end])
 
             #ax.set_ylim(Y_MIN, Y_MAX)
 
             ax.set_xticklabels([str(round(current_time + w - self.interval / 2, 1)) for w in ax.get_xticks()])
 
             # cursor
-            ax.axvline(x=self.interval/2 , color=self.cursor_color, linestyle="-")
+            ax.axvline(x=self.interval / 2 , color=self.cursor_color, linestyle="-")
+            #ax.axvline(x=current_time, color=self.cursor_color, linestyle="-")
 
         self.figure.subplots_adjust(wspace=0, hspace=0)
 

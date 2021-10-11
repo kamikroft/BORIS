@@ -66,6 +66,7 @@ class Plot_spectrogram_RT(QWidget):
         self.figure = Figure()
 
         self.canvas = FigureCanvas(self.figure)
+        #self.canvas.clicked.connect(self.canvas_clicked)
 
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
@@ -97,6 +98,9 @@ class Plot_spectrogram_RT(QWidget):
         self.setLayout(layout)
 
         self.installEventFilter(self)
+
+    def canvas_clicked(self):
+        print("canvas clicked")
 
 
     def eventFilter(self, receiver, event):
@@ -143,7 +147,6 @@ class Plot_spectrogram_RT(QWidget):
 
         try:
             self.sound_info, self.frame_rate = self.get_wav_info(wav_file_path)
-            print(self.sound_info)
             if not self.frame_rate:
                 return {"error": f"unknown format for file {wav_file_path}"}
         except FileNotFoundError:
@@ -154,11 +157,54 @@ class Plot_spectrogram_RT(QWidget):
         self.wav_file_path = wav_file_path
 
         self.snd = parselmouth.Sound(wav_file_path)
-        print(self.snd)
-        self.spectrogram = self.snd.to_spectrogram()
+
+        pre_emphasized_snd = self.snd.copy()
+        pre_emphasized_snd.pre_emphasize()
+        self.spectrogram = pre_emphasized_snd.to_spectrogram()
+
+        #self.spectrogram = self.snd.to_spectrogram()
+        self.X, self.Y = self.spectrogram.x_grid(), self.spectrogram.y_grid()
+        self.sg_db = 10 * np.log10(self.spectrogram.values)
+        self.spectrogram_ymin, self.spectrogram_ymax = self.spectrogram.ymin, self.spectrogram.ymax
+
+
+        dynamic_range = 70
+        self.ax = self.figure.add_subplot(1, 1, 1)
+        self.ax.pcolormesh(self.X, self.Y, self.sg_db,
+                           vmin=self.sg_db.max() - dynamic_range,
+                           cmap=self.spectro_color_map,
+                           picker=5)
+        self.ax.set_ylim(self.spectrogram_ymin, self.spectrogram_ymax)
+
+        self.cursor = None
 
         return {"media_length": self.media_length,
                 "frame_rate": self.frame_rate}
+
+
+    def onpick(self, event):
+
+        print("clicked")
+        return True
+
+        '''
+        if event.artist!=line: return True
+
+        N = len(event.ind)
+        if not N: return True
+
+
+        figi = plt.figure()
+        for subplotnum, dataind in enumerate(event.ind):
+            ax = figi.add_subplot(N,1,subplotnum+1)
+            ax.plot(X[dataind])
+            ax.text(0.05, 0.9, 'mu=%1.3f\nsigma=%1.3f'%(xs[dataind], ys[dataind]),
+                    transform=ax.transAxes, va='top')
+            ax.set_ylim(-0.5, 1.5)
+        figi.show()
+        return True
+        '''
+
 
 
     def plot_spectro(self, current_time: float, force_plot: bool=False):
@@ -172,100 +218,22 @@ class Plot_spectrogram_RT(QWidget):
         if not force_plot and current_time == self.time_mem:
             return
 
-        self.time_mem = current_time
+        # self.time_mem = current_time
 
-        ax = self.figure.add_subplot(1, 1, 1)
+        self.ax.set_xlim(current_time - self.interval / 2, current_time + self.interval / 2)
 
-        ax.clear()
+        if self.cursor is not None:  #  https://stackoverflow.com/questions/13661366/clear-only-part-of-matplotlib-figure
+            self.cursor.remove()
+            del self.cursor
 
-        # start
-        if current_time <= self.interval / 2:
+        self.cursor = self.ax.axvline(x=current_time, color=self.cursor_color, linestyle="-")
 
-
-            dynamic_range=70
-            X, Y = self.spectrogram.x_grid(), self.spectrogram.y_grid()
-            sg_db = 10 * np.log10(self.spectrogram.values)
-            ax.pcolormesh(X, Y, sg_db, vmin=sg_db.max() - dynamic_range, cmap='afmhot')
-            ax.set_ylim(self.spectrogram.ymin, self.spectrogram.ymax)
-
-            ax.set_xlim(current_time - self.interval / 2, current_time + self.interval / 2)
-
-            '''
-            Pxx, freqs, bins, im = ax.specgram(self.sound_info[: int((self.interval) * self.frame_rate)],
-                                               mode="psd",
-                                               #NFFT=1024,
-                                               Fs=self.frame_rate,
-                                               #noverlap=900,
-                                               cmap=self.spectro_color_map)
-
-
-            ax.set_xlim(current_time - self.interval / 2, current_time + self.interval / 2)
-            '''
-
-            # cursor
-            ax.axvline(x=current_time, color=self.cursor_color, linestyle="-")
-
-
-        elif current_time >= self.media_length - self.interval / 2:
-
-            i = int(round(len(self.sound_info) - (self.interval * self.frame_rate), 0))
-
-            dynamic_range=70
-            X, Y = self.spectrogram.x_grid(), self.spectrogram.y_grid()
-            sg_db = 10 * np.log10(self.spectrogram.values)
-            ax.pcolormesh(X, Y, sg_db, vmin=sg_db.max() - dynamic_range, cmap='afmhot')
-            ax.set_ylim(self.spectrogram.ymin, self.spectrogram.ymax)
-
-            '''
-            Pxx, freqs, bins, im = ax.specgram(self.sound_info[i:],
-                                               mode="psd",
-                                               #NFFT=1024,
-                                               Fs=self.frame_rate,
-                                               #noverlap=900,
-                                               cmap=self.spectro_color_map)
-            '''
-
-            lim1 = current_time - (self.media_length - self.interval / 2)
-            lim2 = lim1 + self.interval
-
-            ax.set_xlim(lim1, lim2)
-
-            ax.set_xticklabels([str(round(w + self.media_length - self.interval, 1)) for w in ax.get_xticks()])
-
-            # cursor
-            ax.axvline(x=lim1 + self.interval / 2, color=self.cursor_color, linestyle="-")
-
-        # middle
-        else:
-
-
-            #start = (current_time - self.interval / 2) * self.frame_rate
-            #end = (current_time + self.interval / 2) * self.frame_rate
-
-            dynamic_range=70
-            X, Y = self.spectrogram.x_grid(), self.spectrogram.y_grid()
-            sg_db = 10 * np.log10(self.spectrogram.values)
-            ax.pcolormesh(X, Y, sg_db, vmin=sg_db.max() - dynamic_range, cmap='afmhot')
-            ax.set_ylim(self.spectrogram.ymin, self.spectrogram.ymax)
-
-
-            '''
-            Pxx, freqs, bins, im = ax.specgram(self.sound_info[int(round((current_time - self.interval / 2) * self.frame_rate, 0)):
-                                                               int(round((current_time + self.interval / 2) * self.frame_rate, 0))],
-                                               mode="psd",
-                                               #NFFT=1024,
-                                               Fs=self.frame_rate,
-                                               #noverlap=900,
-                                               cmap=self.spectro_color_map)
-            '''
-
-            ax.set_xticklabels([str(round(current_time + w - self.interval / 2, 1)) for w in ax.get_xticks()])
-
-            # cursor
-            ax.axvline(x=self.interval / 2, color=self.cursor_color, linestyle="-")
-
-        #ax.set_ylim(self.sb_freq_min.value(), self.sb_freq_max.value())
-
-        self.figure.subplots_adjust(wspace=0, hspace=0)
+        #self.figure.subplots_adjust(wspace=0, hspace=0)
 
         self.canvas.draw()
+
+        self.figure.canvas.mpl_connect('pick_event', self.onpick)  # https://stackoverflow.com/questions/43114508/can-a-pyqt-embedded-matplotlib-graph-be-interactive
+
+        return
+
+
