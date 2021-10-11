@@ -107,6 +107,9 @@ class Plot_spectrogram_RT(QWidget):
         """
         send event (if keypress) to main window
         """
+
+
+        print("event")
         if(event.type() == QEvent.KeyPress):
             self.sendEvent.emit(event)
             return True
@@ -218,7 +221,8 @@ class Plot_spectrogram_RT(QWidget):
         if not force_plot and current_time == self.time_mem:
             return
 
-        # self.time_mem = current_time
+        print("plot spectro")
+        self.time_mem = current_time
 
         self.ax.set_xlim(current_time - self.interval / 2, current_time + self.interval / 2)
 
