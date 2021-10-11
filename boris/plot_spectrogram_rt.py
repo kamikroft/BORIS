@@ -232,7 +232,7 @@ class Plot_spectrogram_RT(QWidget):
 
         self.canvas.draw()
 
-        self.figure.canvas.mpl_connect('pick_event', self.onpick)  # https://stackoverflow.com/questions/43114508/can-a-pyqt-embedded-matplotlib-graph-be-interactive
+        self.canvas.mpl_connect('pick_event', self.onpick)  # https://stackoverflow.com/questions/43114508/can-a-pyqt-embedded-matplotlib-graph-be-interactive
 
         return
 
