@@ -129,16 +129,8 @@ class Plot_waveform_RT(QWidget):
         # start
         if current_time <= self.interval / 2:
 
-            '''
-            Pxx, freqs, bins, im = ax.specgram(self.sound_info[: int((self.interval) * self.frame_rate)],
-                                               mode = 'psd' ,
-                                               NFFT=1024,
-                                               Fs=self.frame_rate,
-                                               noverlap=900,
-                                               vmin=VMIN)
-            '''
-
-            time_ = np.linspace(0, len(self.sound_info[: int((self.interval) * self.frame_rate)]) / self.frame_rate, num=len(self.sound_info[: int((self.interval) * self.frame_rate)]))
+            time_ = np.linspace(0, len(self.sound_info[: int((self.interval) * self.frame_rate)]) / self.frame_rate,
+                                num=len(self.sound_info[: int((self.interval) * self.frame_rate)]))
             ax.plot(time_, self.sound_info[: int((self.interval) * self.frame_rate)])
 
             ax.set_xlim( current_time - self.interval / 2  , current_time + self.interval / 2)
@@ -151,26 +143,16 @@ class Plot_waveform_RT(QWidget):
 
         elif current_time >= self.media_length - self.interval / 2:
 
-            i = int(round(len(self.sound_info) - (self.interval * self.frame_rate), 0))
+            i = round(len(self.sound_info) - (self.interval * self.frame_rate))
 
-            '''
-            Pxx, freqs, bins, im = ax.specgram(self.sound_info[i : ],
-                                               mode = "psd",
-                                               NFFT=1024,
-                                               Fs=self.frame_rate,
-                                               noverlap=900,
-                                               vmin=VMIN)
-            '''
-
-            time_ = np.linspace(0, len(self.sound_info[i : ])/self.frame_rate, num=len(self.sound_info[i : ]))
-            ax.plot(time_, self.sound_info[i : ])
+            time_ = np.linspace(0, len(self.sound_info[i: ])/self.frame_rate,
+                                num=len(self.sound_info[i: ]))
+            ax.plot(time_, self.sound_info[i: ])
 
             lim1 = current_time - (self.media_length - self.interval / 2)
             lim2 = lim1 + self.interval
 
-            ax.set_xlim( lim1  , lim2)
-
-            #ax.set_ylim(Y_MIN, Y_MAX)
+            ax.set_xlim(lim1, lim2)
 
             ax.set_xticklabels([str(round(w + self.media_length - self.interval, 1)) for w in ax.get_xticks()])
 
@@ -180,18 +162,9 @@ class Plot_waveform_RT(QWidget):
         # middle
         else:
 
-            start = int(round((current_time - self.interval / 2) * self.frame_rate, 0))
-            end = int(round((current_time + self.interval / 2)* self.frame_rate, 0))
+            start = round((current_time - self.interval / 2) * self.frame_rate)
+            end = round((current_time + self.interval / 2)* self.frame_rate)
 
-            '''
-            Pxx, freqs, bins, im = ax.specgram(self.sound_info[int(round((current_time - self.interval/2) * self.frame_rate, 0)):
-                                                               int(round((current_time + self.interval/2) * self.frame_rate, 0))],
-                                           mode = 'psd' ,
-                                           NFFT=1024,
-                                           Fs=self.frame_rate,
-                                           noverlap=900,
-                                               vmin=VMIN)
-            '''
             time_ = np.linspace(0, len(self.sound_info[start:end]) / self.frame_rate,
                                 num=len(self.sound_info[start:end]))
 
@@ -203,7 +176,6 @@ class Plot_waveform_RT(QWidget):
 
             # cursor
             ax.axvline(x=self.interval / 2 , color=self.cursor_color, linestyle="-")
-            #ax.axvline(x=current_time, color=self.cursor_color, linestyle="-")
 
         self.figure.subplots_adjust(wspace=0, hspace=0)
 

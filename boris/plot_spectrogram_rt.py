@@ -64,9 +64,7 @@ class Plot_spectrogram_RT(QWidget):
         self.spectro_color_map = matplotlib.pyplot.get_cmap("viridis")
 
         self.figure = Figure()
-
         self.canvas = FigureCanvas(self.figure)
-        #self.canvas.clicked.connect(self.canvas_clicked)
 
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
@@ -99,17 +97,12 @@ class Plot_spectrogram_RT(QWidget):
 
         self.installEventFilter(self)
 
-    def canvas_clicked(self):
-        print("canvas clicked")
-
 
     def eventFilter(self, receiver, event):
         """
         send event (if keypress) to main window
         """
 
-
-        print("event")
         if(event.type() == QEvent.KeyPress):
             self.sendEvent.emit(event)
             return True
@@ -170,13 +163,11 @@ class Plot_spectrogram_RT(QWidget):
         self.sg_db = 10 * np.log10(self.spectrogram.values)
         self.spectrogram_ymin, self.spectrogram_ymax = self.spectrogram.ymin, self.spectrogram.ymax
 
-
         dynamic_range = 70
         self.ax = self.figure.add_subplot(1, 1, 1)
         self.ax.pcolormesh(self.X, self.Y, self.sg_db,
                            vmin=self.sg_db.max() - dynamic_range,
-                           cmap=self.spectro_color_map,
-                           picker=5)
+                           cmap=self.spectro_color_map)
         self.ax.set_ylim(self.spectrogram_ymin, self.spectrogram_ymax)
 
         self.cursor = None
@@ -184,13 +175,13 @@ class Plot_spectrogram_RT(QWidget):
         return {"media_length": self.media_length,
                 "frame_rate": self.frame_rate}
 
-
+    '''
     def onpick(self, event):
 
         print("clicked")
         return True
 
-        '''
+
         if event.artist!=line: return True
 
         N = len(event.ind)
@@ -206,7 +197,8 @@ class Plot_spectrogram_RT(QWidget):
             ax.set_ylim(-0.5, 1.5)
         figi.show()
         return True
-        '''
+
+    '''
 
 
 
@@ -221,7 +213,6 @@ class Plot_spectrogram_RT(QWidget):
         if not force_plot and current_time == self.time_mem:
             return
 
-        print("plot spectro")
         self.time_mem = current_time
 
         self.ax.set_xlim(current_time - self.interval / 2, current_time + self.interval / 2)
@@ -236,7 +227,7 @@ class Plot_spectrogram_RT(QWidget):
 
         self.canvas.draw()
 
-        self.canvas.mpl_connect('pick_event', self.onpick)  # https://stackoverflow.com/questions/43114508/can-a-pyqt-embedded-matplotlib-graph-be-interactive
+        # self.canvas.mpl_connect('pick_event', self.onpick)  # https://stackoverflow.com/questions/43114508/can-a-pyqt-embedded-matplotlib-graph-be-interactive
 
         return
 
