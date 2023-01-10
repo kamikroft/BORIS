@@ -199,38 +199,28 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QLabel" name="lb_time_interval">
-          <property name="text">
-           <string>Time interval</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QRadioButton" name="rb_observed_events">
+           <widget class="QRadioButton" name="rb_full">
             <property name="text">
-             <string>Observed events</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rb_user_defined">
-            <property name="text">
-             <string>User defined</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="rb_media_duration">
-            <property name="text">
-             <string>Media file(s) duration</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
+             <string>Full observation(s)</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_interval">
+            <property name="text">
+             <string>Limit to time interval</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_limit">
+            <property name="text">
+             <string>Limit to observed events</string>
             </property>
            </widget>
           </item>
@@ -258,6 +248,13 @@
            <enum>QFrame::Raised</enum>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Time interval</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>

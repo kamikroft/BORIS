@@ -20,12 +20,13 @@ This file is part of BORIS.
 
 """
 
-import binascii
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
-from PyQt5.QtCore import pyqtSignal, QPoint, Qt
-from PyQt5.QtGui import (QPen, QPixmap, QBrush, QMouseEvent, QPolygonF, QColor)
-from PyQt5.QtWidgets import (QDialog, QGraphicsView, QGraphicsScene, QLineEdit, QVBoxLayout, QHBoxLayout, QSpacerItem,
-                             QSizePolicy, QPushButton, QGraphicsPixmapItem, QGraphicsPolygonItem)
+import json
+import binascii
+import os
 
 
 class ModifiersCodingMapWindowClass(QDialog):

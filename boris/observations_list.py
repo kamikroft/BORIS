@@ -23,11 +23,11 @@ Copyright 2012-2022 Olivier Friard
 
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import (QTableWidgetItem, QLabel, QLineEdit, QTableWidget, QAbstractItemView, QComboBox,
-                             QGridLayout, QHBoxLayout, QSpacerItem, QPushButton, QDialog, QSizePolicy)
+                             QGridLayout, QHBoxLayout, QSpacerItem, QPushButton, QDialog)
 
-from . import config as cfg
-from . import dialog
-from . import utilities as util
+from boris import config
+from boris import dialog
+from boris.utilities import *
 
 commands_index = {"Start": 2, "Edit": 3, "View": 4}
 
@@ -53,10 +53,10 @@ class observationsList_widget(QDialog):
         self.not_paired = not_paired
         self.column_type = column_type
 
-        self.setWindowTitle(f"Observations list - {cfg.programName}")
+        self.setWindowTitle(f"Observations list - {config.programName}")
         self.label = QLabel("")
 
-        self.mode = cfg.SINGLE
+        self.mode = config.SINGLE
 
         self.lineEdit = QLineEdit(self)
         self.lineEdit.textChanged.connect(self.view_filter)
@@ -133,20 +133,20 @@ class observationsList_widget(QDialog):
 
     def view_doubleClicked(self, index):
 
-        if self.mode == cfg.MULTIPLE:
+        if self.mode == config.MULTIPLE:
             return
 
-        if self.mode == cfg.OPEN or self.mode == cfg.EDIT:
+        if self.mode == config.OPEN or self.mode == config.EDIT:
             self.done(2)
             return
 
-        if self.mode == cfg.SELECT1:
+        if self.mode == config.SELECT1:
             self.done(2)
             return
 
-        response = dialog.MessageDialog(cfg.programName, "What do you want to do with this observation?",
-                                        list(commands_index.keys()) + [cfg.CANCEL])
-        if response == cfg.CANCEL:
+        response = dialog.MessageDialog(config.programName, "What do you want to do with this observation?",
+                                        list(commands_index.keys()) + [config.CANCEL])
+        if response == config.CANCEL:
             return
         else:
             self.done(commands_index[response])
@@ -177,7 +177,7 @@ class observationsList_widget(QDialog):
 
     def set_item(self, r, c):
 
-        if self.column_type[c] == cfg.NUMERIC:
+        if self.column_type[c] == config.NUMERIC:
             try:
                 item = MyTableWidgetItem(self.data[r][c], float(self.data[r][c]))
             except Exception:
