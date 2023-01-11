@@ -9,11 +9,11 @@ BORIS is a free and open-source software available for GNU/Linux, Windows and Ma
 It provides also some analysis tools like time budget. See `all the features <http://www.boris.unito.it/pages/features.html>`_ for details.
 
 
-The upcoming version 8 contains more features: `features added in v. 8 <http://www.boris.unito.it/pages/boris_v8.html>`_.
+The new version 8 contains more features: `features added in v. 8 <http://www.boris.unito.it/pages/boris_v8.html>`_.
 
 
 The `BORIS publication <https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12584>`_ 
-has more than `900 citations in scientific publications <http://www.boris.unito.it/pages/citations.html>`_ with peer-reviewing (Scopus source).
+has more than `1000 citations in scientific publications <http://www.boris.unito.it/pages/citations.html>`_ with peer-reviewing (Scopus source).
 
 See http://www.boris.unito.it
 
@@ -26,8 +26,8 @@ See http://www.boris.unito.it
 Documentation
 ---------------------------------------------------------------------------------------------------------
 
-The official documentation is hosted here:
-http://boris.readthedocs.io/
+The official documentation for v.7 is hosted here:
+https://boris.readthedocs.io/en/v7/
 
 The documentation provides a good starting point for learning how to use BORIS.
 
@@ -74,7 +74,7 @@ Licence
 
 Distributed with a `GPL v.3 license <LICENSE.TXT>`_
 
-Copyright 2012-2022 Olivier Friard
+Copyright 2012-202333livier Friard
 
 
 
