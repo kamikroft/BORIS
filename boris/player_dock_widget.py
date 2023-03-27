@@ -29,6 +29,9 @@ import datetime as dt
 
 os.environ["PATH"] = os.path.dirname(__file__) + os.sep + "misc" + os.pathsep + os.environ["PATH"]
 
+from . import mpv3 as mpv
+
+"""
 try:
     from . import mpv2 as mpv
 
@@ -52,7 +55,7 @@ except OSError:  # libmpv not found
         f_out.write(msg)
         f_out.write("-" * 80 + "\n")
     sys.exit()
-
+"""
 
 from PyQt5.QtWidgets import QLabel, QDockWidget, QWidget, QHBoxLayout, QSlider, QSizePolicy, QStackedWidget
 from PyQt5.QtCore import pyqtSignal, QEvent, Qt
@@ -82,7 +85,6 @@ class Clickable_label(QLabel):
 
 
 class DW_player(QDockWidget):
-
     key_pressed_signal = pyqtSignal(QEvent)
     volume_slider_moved_signal = pyqtSignal(int, int)
     view_signal = pyqtSignal(int, str, int)

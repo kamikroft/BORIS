@@ -30,6 +30,9 @@ from . import version
 from . import config as cfg
 from . import utilities as util
 
+from . import mpv3 as mpv
+
+"""
 try:
     from . import mpv2 as mpv
 
@@ -43,6 +46,8 @@ try:
 
 except RuntimeError:  # libmpv found but version too old
     from . import mpv as mpv
+"""
+
 
 from PyQt5.QtCore import QT_VERSION_STR, PYQT_VERSION_STR
 from PyQt5.QtGui import QPixmap
