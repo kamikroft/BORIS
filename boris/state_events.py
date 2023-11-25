@@ -151,7 +151,9 @@ def fix_unpaired_events(self, silent_mode: bool = False):
         for obs_id in selected_observations:
             r, msg = project_functions.check_state_events_obs(obs_id, self.pj[cfg.ETHOGRAM], self.pj[cfg.OBSERVATIONS][obs_id])
             if "NOT PAIRED" in msg.upper():
+                # determine max time of events
                 fix_at_time = max(x[0] for x in self.pj[cfg.OBSERVATIONS][obs_id][cfg.EVENTS])
+                # list of events to add to fix unpaired events
                 events_to_add = project_functions.fix_unpaired_state_events(
                     self.pj[cfg.ETHOGRAM], self.pj[cfg.OBSERVATIONS][obs_id], fix_at_time
                 )
