@@ -994,7 +994,7 @@ class Observation(QDialog, Ui_Form):
                     return False
 
             # check if offset set and only player #1 is used
-            if min(players_list) == 1:
+            if len(set(players_list)) == 1:
                 for row in range(self.twVideo1.rowCount()):
                     if float(self.twVideo1.item(row, 1).text()):
                         QMessageBox.critical(

@@ -153,6 +153,7 @@ class Duration_widget(QWidget):
         lay.setContentsMargins(0, 0, 0, 0)
 
         self.Stack = QStackedWidget()
+
         self.w1 = Widget_hhmmss()
         self.w1.time_changed_signal.connect(self.time_changed)
         self.Stack.addWidget(self.w1)
