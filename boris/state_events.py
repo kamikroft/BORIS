@@ -82,7 +82,7 @@ def check_state_events(self, mode: str = "all") -> None:
     results.exec_()
 
 
-def fix_unpaired_events(self):
+def fix_unpaired_events(self, silent_mode: bool = False):
     """
     fix unpaired state events
     """
@@ -91,7 +91,7 @@ def fix_unpaired_events(self):
         r, msg = project_functions.check_state_events_obs(
             self.observationId, self.pj[cfg.ETHOGRAM], self.pj[cfg.OBSERVATIONS][self.observationId]
         )
-        if "not PAIRED" not in msg:
+        if not silent_mode and "not PAIRED" not in msg:
             QMessageBox.information(
                 None,
                 cfg.programName,

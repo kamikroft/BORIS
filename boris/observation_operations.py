@@ -58,6 +58,7 @@ from . import plot_data_module
 from . import player_dock_widget
 from . import gui_utilities
 from . import video_operations
+from . import state_events
 
 
 def export_observations_list_clicked(self):
@@ -1024,6 +1025,7 @@ def close_observation(self):
     logging.info(f"Close observation (player type: {self.playerType})")
 
     # check observation events
+
     flag_ok, msg = project_functions.check_state_events_obs(
         self.observationId,
         self.pj[cfg.ETHOGRAM],
@@ -1043,6 +1045,9 @@ def close_observation(self):
         results.pbOK.setText("Fix unpaired state events")
 
         if results.exec_():  # fix events
+            state_events.fix_unpaired_events(self, silent_mode=True)
+
+            """
             w = dialog.Ask_time(self.timeFormat)
             w.setWindowTitle("Fix UNPAIRED state events")
             w.label.setText("Fix UNPAIRED events at time")
@@ -1068,11 +1073,12 @@ def close_observation(self):
                     return
             else:
                 return
+            """
 
     self.saved_state = self.saveState()
 
     if self.playerType == cfg.MEDIA:
-        self.media_scan_sampling_mem = []
+        self.media_scan_sampling_mem: list = []
         logging.info("Stop plot timer")
         self.plot_timer.stop()
 
