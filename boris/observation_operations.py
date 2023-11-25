@@ -1048,6 +1048,7 @@ def close_observation(self):
             state_events.fix_unpaired_events(self, silent_mode=True)
 
             """
+            to delete 2023-11-25
             w = dialog.Ask_time(self.timeFormat)
             w.setWindowTitle("Fix UNPAIRED state events")
             w.label.setText("Fix UNPAIRED events at time")
