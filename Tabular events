@@ -1,0 +1,83 @@
+BORIS version: 8.24.3
+OS: Windows 10 10.0.22631
+CPU: AMD64 Intel64 Family 6 Model 140 Stepping 1, GenuineIntel
+Python 3.11.2 (64-bit)
+Qt 5.15.2 - PyQt 5.15.10
+MPV library version: 2.1
+MPV library file path: C:\Users\jjsis\OneDrive\Plocha\BORIS\Lib\site-packages\boris\misc\mpv-2.dll
+
+Error succeded at 2024-04-08 09:32
+
+Traceback (most recent call last):
+  File "C:\Users\jjsis\OneDrive\Plocha\BORIS\Lib\site-packages\boris\connections.py", line 138, in <lambda>
+    self.actionExportEvents_2.triggered.connect(lambda: export_events.export_tabular_events(self, mode="tabular"))
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jjsis\OneDrive\Plocha\BORIS\Lib\site-packages\boris\export_events.py", line 130, in export_tabular_events
+    _, selected_observations = select_observations.select_observations2(
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jjsis\OneDrive\Plocha\BORIS\Lib\site-packages\boris\select_observations.py", line 75, in select_observations2
+    interval = project_functions.observed_interval(pj[cfg.OBSERVATIONS][obs])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jjsis\OneDrive\Plocha\BORIS\Lib\site-packages\boris\project_functions.py", line 1167, in observed_interval
+    return (dec(min(events)), dec(max(events)))
+                ^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'str' and 'int'
+
+
+System info
+===========
+
+
+Host Name:                 BABINTB
+OS Name:                   Microsoft Windows 11 Home
+OS Version:                10.0.22631 N/A Build 22631
+OS Manufacturer:           Microsoft Corporation
+OS Configuration:          Standalone Workstation
+OS Build Type:             Multiprocessor Free
+Registered Owner:          j.j.sistkovi@seznam.cz
+Registered Organization:   N/A
+Product ID:                00342-20820-95153-AAOEM
+Original Install Date:     09.04.2023, 12:28:00
+System Boot Time:          05.04.2024, 22:14:13
+System Manufacturer:       ASUSTeK COMPUTER INC.
+System Model:              VivoBook_ASUSLaptop X515EA_X515EA
+System Type:               x64-based PC
+Processor(s):              1 Processor(s) Installed.
+                           [01]: Intel64 Family 6 Model 140 Stepping 1 GenuineIntel ~2995 Mhz
+BIOS Version:              American Megatrends International, LLC. X515EA.306, 02.11.2021
+Windows Directory:         C:\WINDOWS
+System Directory:          C:\WINDOWS\system32
+Boot Device:               \Device\HarddiskVolume1
+System Locale:             cs;¬eçtina
+Input Locale:              cs;¬eçtina
+Time Zone:                 (UTC+01:00) Praha, Bratislava, Budapeçś, BŘlehrad, Lublaĺ
+Total Physical Memory:     3˙791 MB
+Available Physical Memory: 514 MB
+Virtual Memory: Max Size:  8˙399 MB
+Virtual Memory: Available: 2˙778 MB
+Virtual Memory: In Use:    5˙621 MB
+Page File Location(s):     C:\pagefile.sys
+Domain:                    WORKGROUP
+Logon Server:              \\BABINTB
+Hotfix(s):                 6 Hotfix(s) Installed.
+                           [01]: KB5034467
+                           [02]: KB5012170
+                           [03]: KB5027397
+                           [04]: KB5035853
+                           [05]: KB5032393
+                           [06]: KB5035967
+Network Card(s):           2 NIC(s) Installed.
+                           [01]: Realtek 8821CE Wireless LAN 802.11ac PCI-E NIC
+                                 Connection Name: Wi-Fi
+                                 DHCP Enabled:    Yes
+                                 DHCP Server:     192.168.1.1
+                                 IP address(es)
+                                 [01]: 192.168.1.134
+                                 [02]: fe80::9204:6c02:49e3:7129
+                           [02]: Bluetooth Device (Personal Area Network)
+                                 Connection Name: Sˇśov‚ pýipojenˇ Bluetooth
+                                 Status:          Media disconnected
+Hyper-V Requirements:      VM Monitor Mode Extensions: Yes
+                           Virtualization Enabled In Firmware: Yes
+                           Second Level Address Translation: Yes
+                           Data Execution Prevention Available: Yes
